@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎤 Voice Changer — AI Realistic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="voice-changer.css">
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
+
+    <div class="container">
+        <h1><span class="text-green">🎤 VOICE CHANGER</span></h1>
+        <p class="tagline">I-record o mag-upload → baguhin sa AI voice — realistic quality</p>
+
+        <!-- STEP 1: AUDIO SOURCE -->
+        <div class="card">
+            <h2>1️⃣ Pinagmulan ng Audio</h2>
+            
+            <button id="recordBtn" class="btn-record">🔴 SIMULAN ANG PAG-RECORD</button>
+            <p id="recStatus" class="status-text">Handang mag-record</p>
+            
+            <div class="divider"></div>
+            
+            <label class="btn-upload">
+                📁 O MAG-UPLOAD NG AUDIO FILE
+                <input type="file" id="audioInput" accept="audio/*">
+            </label>
+            <p id="fileStatus" class="status-text">Walang napiling file</p>
+        </div>
+
+        <!-- STEP 2: CHOOSE VOICE -->
+        <div class="card">
+            <h2>2️⃣ Piliin ang Bagong Boses</h2>
+            
+            <div class="voice-grid" id="voiceGrid">
+                <div class="voice-option" data-id="hpp4J3VqNfWAUOO0d1Us">
+                    <div class="emoji">👩</div><span>Bella</span>
+                </div>
+                <div class="voice-option" data-id="FGY2WhTYpPnrIDTdsKH5">
+                    <div class="emoji">👩</div><span>Laura</span>
+                </div>
+                <div class="voice-option" data-id="SAz9YHcvj6GT2YYXdXww">
+                    <div class="emoji">🌊</div><span>River</span>
+                </div>
+                <div class="voice-option" data-id="cjVigY5qzO86Huf0OWal">
+                    <div class="emoji">👨</div><span>Eric</span>
+                </div>
+                <div class="voice-option selected" data-id="pqHfZKP75CvOlQylNhV4">
+                    <div class="emoji">👨</div><span>Bill</span>
+                </div>
+                <div class="voice-option" data-id="pFZP5JQG7iQjIQuC4Bku">
+                    <div class="emoji">👩</div><span>Lily</span>
+                </div>
+                <div class="voice-option" data-id="EXAVITQu4vr4xnSDxMaL">
+                    <div class="emoji">👩</div><span>Sarah</span>
+                </div>
+                <div class="voice-option" data-id="JBFqnCBsd6RMkjVDRZzb">
+                    <div class="emoji">👨</div><span>George</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: CONVERT -->
+        <div class="card">
+            <h2>3️⃣ I-convert!</h2>
+            <button id="convertBtn" class="btn-primary">✨ IBAHIN ANG BOSES — AI REALISTIC</button>
+            <p id="convertStatus" class="status-text"></p>
+            
+            <div id="resultBox" class="result-box hidden">
+                <p id="resultMsg" class="success">✅ Tapos na!</p>
+                <audio id="outputAudio" controls>
+                <a id="downloadLink" style="display:block; text-decoration:none; margin-top:12px;">
+                    <button class="btn-primary" style="background:linear-gradient(90deg,#00F0FF,#BF00FF);">⬇ I-DOWNLOAD ANG BAGONG BOSES</button>
+                </a>
+            </div>
+        </div>
+
+        <footer>Powered by ElevenLabs Speech-to-Speech AI</footer>
+    </div>
+
+    <script>
+        // ===== API CONFIG =====
+        const API_KEY = 'sk_ab07b8598b3586c17cdc0f64a6fa42211562290ae6432785';
+        const API_BASE = 'https://api.elevenlabs.io/v1';
+
+        // ===== ELEMENTS =====
+        const recordBtn = document.getElementById('recordBtn');
+        const recStatus = document.getElementById('recStatus');
+        const audioInput = document.getElementById('audioInput');
+        const fileStatus = document.getElementById('fileStatus');
+        const convertBtn = document.getElementById('convertBtn');
+        const convertStatus = document.getElementById('convertStatus');
+        const resultBox = document.getElementById('resultBox');
+        const resultMsg = document.getElementById('resultMsg');
+        const outputAudio = document.getElementById('outputAudio');
+        const downloadLink = document.getElementById('downloadLink');
+        const voiceGrid = document.getElementById('voiceGrid');
+
+        // ===== STATE =====
+        let mediaRecorder;
+        let recordedChunks = [];
+        let audioBlob = null;
+        let selectedVoiceId = 'pqHfZKP75CvOlQylNhV4';
+        let isRecording = false;
+        let outputBlobUrl = null;
+
+        // ===== VOICE SELECTION =====
+        voiceGrid.querySelectorAll('.voice-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                voiceGrid.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                selectedVoiceId = opt.dataset.id;
+            });
+        });
+
+        // ===== RECORDING =====
+        recordBtn.addEventListener('click', async () => {
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    recordedChunks = [];
+                    
+                    mediaRecorder.ondataavailable = e => recordedChunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
+                        fileStatus.textContent = '✅ Recording saved!';
+                        recStatus.textContent = 'Handa nang i-convert';
+                    };
+                    
+                    mediaRecorder.start();
+                    isRecording = true;
+                    recordBtn.classList.add('recording');
+                    recordBtn.innerHTML = '⏹ ITIGIL ANG PAG-RECORD';
+                    recStatus.textContent = '🔴 Nagrerecord... Magsalita ka!';
+                    
+                } catch (err) {
+                    alert('❌ Hindi ma-access ang mikropono: ' + err.message);
+                }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                recordBtn.classList.remove('recording');
+                recordBtn.innerHTML = '🔴 SIMULAN ANG PAG-RECORD';
+            }
+        });
+
+        // ===== FILE UPLOAD =====
+        audioInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) {
+                audioBlob = file;
+                fileStatus.textContent = '✅ Napili: ' + file.name;
+                recStatus.textContent = 'Handa nang i-convert';
+            }
+        });
+
+        // ===== CONVERT =====
+        convertBtn.addEventListener('click', async () => {
+            if (!audioBlob) {
+                alert('⚠️ Mag-record o mag-upload muna ng audio!');
+                return;
+            }
+
+            convertBtn.disabled = true;
+            convertBtn.innerHTML = '<span class="loading"></span>INI-ISIP NG AI...';
+            convertStatus.textContent = '🔄 Nagpapadala sa ElevenLabs...';
+            resultBox.classList.add('hidden');
+
+            try {
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'input.wav');
+                formData.append('voice_id', selectedVoiceId);
+                formData.append('model_id', 'eleven_english_sts_v2');
+                formData.append('output_format', 'mp3_44100_128');
+
+                const response = await fetch(`${API_BASE}/speech-to-speech/${selectedVoiceId}`, {
+                    method: 'POST',
+                    headers: { 'xi-api-key': API_KEY },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`API Error ${response.status} — tingnan kung may credits ka pa sa ElevenLabs`);
+                }
+
+                const resultBlob = await response.blob();
+                outputBlobUrl = URL.createObjectURL(resultBlob);
+                
+                outputAudio.src = outputBlobUrl;
+                downloadLink.href = outputBlobUrl;
+                downloadLink.download = 'ai-voice-' + Date.now() + '.mp3';
+                
+                resultMsg.className = 'success';
+                resultMsg.textContent = '✅ TAPOS NA! Narito ang bagong boses mo 👇';
+                resultBox.classList.remove('hidden');
+                convertStatus.textContent = '🎉 Realistic AI voice generated!';
+
+            } catch (err) {
+                console.error(err);
+                resultMsg.className = 'error';
+                resultMsg.textContent = '❌ ' + err.message;
+                resultBox.classList.remove('hidden');
+                convertStatus.textContent = '⚠️ Tingnan ang API key at credits mo sa ElevenLabs';
+            } finally {
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '✨ IBAHIN ANG BOSES — AI REALISTIC';
+            }
+        });
+    </script>
+</body>
+</html>
