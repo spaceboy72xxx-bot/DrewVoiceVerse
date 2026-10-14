@@ -17,7 +17,6 @@
         <h1><span class="text-green">🎤 VOICE CHANGER</span></h1>
         <p class="tagline">I-record o mag-upload → baguhin sa AI voice — realistic quality</p>
 
-        <!-- STEP 1: AUDIO SOURCE -->
         <div class="card">
             <h2>1️⃣ Pinagmulan ng Audio</h2>
             
@@ -28,12 +27,11 @@
             
             <label class="btn-upload">
                 📁 O MAG-UPLOAD NG AUDIO FILE
-                <input type="file" id="audioInput" accept="audio/*">
+                <input type="file" id="audioInput" accept="audio/*" hidden>
             </label>
             <p id="fileStatus" class="status-text">Walang napiling file</p>
         </div>
 
-        <!-- STEP 2: CHOOSE VOICE -->
         <div class="card">
             <h2>2️⃣ Piliin ang Bagong Boses</h2>
             
@@ -65,7 +63,6 @@
             </div>
         </div>
 
-        <!-- STEP 3: CONVERT -->
         <div class="card">
             <h2>3️⃣ I-convert!</h2>
             <button id="convertBtn" class="btn-primary">✨ IBAHIN ANG BOSES — AI REALISTIC</button>
@@ -84,11 +81,9 @@
     </div>
 
     <script>
-        // ===== API CONFIG =====
         const API_KEY = 'sk_ab07b8598b3586c17cdc0f64a6fa42211562290ae6432785';
         const API_BASE = 'https://api.elevenlabs.io/v1';
 
-        // ===== ELEMENTS =====
         const recordBtn = document.getElementById('recordBtn');
         const recStatus = document.getElementById('recStatus');
         const audioInput = document.getElementById('audioInput');
@@ -101,7 +96,6 @@
         const downloadLink = document.getElementById('downloadLink');
         const voiceGrid = document.getElementById('voiceGrid');
 
-        // ===== STATE =====
         let mediaRecorder;
         let recordedChunks = [];
         let audioBlob = null;
@@ -109,7 +103,6 @@
         let isRecording = false;
         let outputBlobUrl = null;
 
-        // ===== VOICE SELECTION =====
         voiceGrid.querySelectorAll('.voice-option').forEach(opt => {
             opt.addEventListener('click', () => {
                 voiceGrid.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected'));
@@ -118,7 +111,6 @@
             });
         });
 
-        // ===== RECORDING =====
         recordBtn.addEventListener('click', async () => {
             if (!isRecording) {
                 try {
@@ -150,7 +142,6 @@
             }
         });
 
-        // ===== FILE UPLOAD =====
         audioInput.addEventListener('change', e => {
             const file = e.target.files[0];
             if (file) {
@@ -160,7 +151,6 @@
             }
         });
 
-        // ===== CONVERT =====
         convertBtn.addEventListener('click', async () => {
             if (!audioBlob) {
                 alert('⚠️ Mag-record o mag-upload muna ng audio!');
@@ -187,7 +177,7 @@
 
                 if (!response.ok) {
                     const errText = await response.text();
-                    throw new Error(`API Error ${response.status} — tingnan kung may credits ka pa sa ElevenLabs`);
+                    throw new Error(`API Error ${response.status} — tingnan ang API key at credits`);
                 }
 
                 const resultBlob = await response.blob();
@@ -203,11 +193,10 @@
                 convertStatus.textContent = '🎉 Realistic AI voice generated!';
 
             } catch (err) {
-                console.error(err);
                 resultMsg.className = 'error';
                 resultMsg.textContent = '❌ ' + err.message;
                 resultBox.classList.remove('hidden');
-                convertStatus.textContent = '⚠️ Tingnan ang API key at credits mo sa ElevenLabs';
+                convertStatus.textContent = '⚠️ May problema — tingnan ang API key at internet';
             } finally {
                 convertBtn.disabled = false;
                 convertBtn.innerHTML = '✨ IBAHIN ANG BOSES — AI REALISTIC';
