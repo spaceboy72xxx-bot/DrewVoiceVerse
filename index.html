@@ -73,10 +73,10 @@
         </header>
 
         <nav class="flex flex-wrap justify-center gap-2 mb-10">
-            <button data-tab="voice" class="tab-btn active glass px-5 py-3 rounded-lg border border-neon-green/30 text-neon-green font-semibold transition-all hover:border-neon-green">
+            <button data-tab="voice" class="tab-btn glass px-5 py-3 rounded-lg border border-neon-green/30 text-neon-green font-semibold transition-all hover:border-neon-green">
                 <i class="fa fa-microphone mr-2"></i>Voice Changer
             </button>
-            <button data-tab="tts" class="tab-btn glass px-5 py-3 rounded-lg border border-gray-600 text-gray-300 font-semibold transition-all hover:border-neon-cyan hover:text-neon-cyan">
+            <button data-tab="tts" class="tab-btn active glass px-5 py-3 rounded-lg border border-gray-600 text-gray-300 font-semibold transition-all hover:border-neon-cyan hover:text-neon-cyan">
                 <i class="fa fa-file-text-o mr-2"></i>Text to Speech
             </button>
             <button data-tab="video" class="tab-btn glass px-5 py-3 rounded-lg border border-gray-600 text-gray-300 font-semibold transition-all hover:border-neon-purple hover:text-neon-purple">
@@ -88,31 +88,15 @@
         </nav>
 
         <!-- Voice Changer Panel -->
-        <div id="voice-panel" class="tab-content block">
+        <div id="voice-panel" class="tab-content hidden">
             <div class="glass rounded-2xl p-6 border border-neon-green/20 border-glow max-w-2xl mx-auto">
                 <h2 class="font-orbitron text-2xl text-neon-green mb-6 text-center">🎙️ VOICE CHANGER</h2>
                 
                 <h3 class="text-center text-gray-300 mb-4">Pumili ng Boses</h3>
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
-                    <div class="voice-card selected glass p-3 rounded-lg border border-neon-green/50 cursor-pointer" data-voice="pNInz6obpgDQGcFmaJgB">
-                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-green/20 flex items-center justify-center text-xl">👨</div>
-                        <p class="text-center text-sm font-semibold">Adam</p>
-                    </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="21m00Tcm4TlvDq8ikWAM">
-                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-cyan/20 flex items-center justify-center text-xl">👩</div>
-                        <p class="text-center text-sm font-semibold">Rachel</p>
-                    </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="AZnzlk1XvdvUeBnXmlldc">
-                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-cyan/20 flex items-center justify-center text-xl">👧</div>
-                        <p class="text-center text-sm font-semibold">Elli</p>
-                    </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="onwK4e9ZLuTAKqWW03F9">
-                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-green/20 flex items-center justify-center text-xl">🧔</div>
-                        <p class="text-center text-sm font-semibold">Antoni</p>
-                    </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="iMl51dKLSb3bP1N9G9wB">
-                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-purple/20 flex items-center justify-center text-xl">👩</div>
-                        <p class="text-center text-sm font-semibold">Nicole</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+                    <div class="voice-card selected glass p-3 rounded-lg border border-neon-green/50 cursor-pointer" data-voice="BEdKH7cUaEChKVy1nHhI">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-green/20 flex items-center justify-center text-xl">🎙️</div>
+                        <p class="text-center text-sm font-semibold">Ang Aking Boses</p>
                     </div>
                 </div>
 
@@ -147,7 +131,7 @@
         </div>
 
         <!-- Text to Speech Panel -->
-        <div id="tts-panel" class="tab-content hidden">
+        <div id="tts-panel" class="tab-content block">
             <div class="glass rounded-2xl p-6 border border-neon-cyan/20 max-w-2xl mx-auto">
                 <h2 class="font-orbitron text-2xl text-neon-cyan mb-6 text-center">📝 TEXT TO SPEECH</h2>
                 
@@ -159,23 +143,19 @@
                     </div>
                     
                     <div>
-                        <label class="text-sm text-gray-400 block mb-2">Pumili ng Boses:</label>
+                        <label class="text-sm text-gray-400 block mb-2">Napiling Boses:</label>
                         <select id="ttsVoice" class="w-full bg-dark/50 border border-neon-cyan/30 rounded-lg p-3 focus:outline-none">
-                            <option value="21m00Tcm4TlvDq8ikWAM">Rachel — Babae</option>
-                            <option value="pNInz6obpgDQGcFmaJgB" selected>Adam — Lalaki</option>
-                            <option value="AZnzlk1XvdvUeBnXmlldc">Elli — Babae</option>
-                            <option value="onwK4e9ZLuTAKqWW03F9">Antoni — Lalaki</option>
-                            <option value="iMl51dKLSb3bP1N9G9wB">Nicole — Babae</option>
+                            <option value="BEdKH7cUaEChKVy1nHhI" selected>🎙️ Ang Aking Boses</option>
                         </select>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="text-sm text-gray-400 block mb-2">Katapangan (Stability): <span id="stabilityVal">50%</span></label>
+                            <label class="text-sm text-gray-400 block mb-2">Katapangan: <span id="stabilityVal">50%</span></label>
                             <input type="range" id="stability" min="0" max="100" value="50" class="w-full accent-neon-cyan" oninput="document.getElementById('stabilityVal').textContent = this.value + '%'">
                         </div>
                         <div>
-                            <label class="text-sm text-gray-400 block mb-2">Kalinawan (Clarity): <span id="clarityVal">75%</span></label>
+                            <label class="text-sm text-gray-400 block mb-2">Kalinawan: <span id="clarityVal">75%</span></label>
                             <input type="range" id="clarity" min="0" max="100" value="75" class="w-full accent-neon-cyan" oninput="document.getElementById('clarityVal').textContent = this.value + '%'">
                         </div>
                     </div>
@@ -299,7 +279,7 @@
 
     <script>
         const API_KEY = 'sk_88c95021af34464fe9a2a21741fa10d60674e7eea1f98a56';
-        let selectedVoice = 'pNInz6obpgDQGcFmaJgB';
+        let selectedVoice = 'BEdKH7cUaEChKVy1nHhI';
         let mediaRecorder = null;
         let recordedChunks = [];
         let isRecording = false;
@@ -308,15 +288,23 @@
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('border-neon-green', 'text-neon-green');
+                    b.classList.remove('border-neon-green', 'text-neon-green', 'border-neon-cyan', 'text-neon-cyan', 'border-neon-purple', 'text-neon-purple', 'border-neon-pink', 'text-neon-pink');
                     b.classList.add('border-gray-600', 'text-gray-300');
                 });
-                btn.classList.remove('border-gray-600', 'text-gray-300');
-                btn.classList.add('border-neon-green', 'text-neon-green');
-                
                 document.querySelectorAll('.tab-content').forEach(p => p.classList.add('hidden'));
+                
                 const tabId = btn.getAttribute('data-tab');
                 document.getElementById(`${tabId}-panel`).classList.remove('hidden');
+                
+                if (tabId === 'voice') {
+                    btn.classList.add('border-neon-green', 'text-neon-green');
+                } else if (tabId === 'tts') {
+                    btn.classList.add('border-neon-cyan', 'text-neon-cyan');
+                } else if (tabId === 'video') {
+                    btn.classList.add('border-neon-purple', 'text-neon-purple');
+                } else if (tabId === 'dubbing') {
+                    btn.classList.add('border-neon-pink', 'text-neon-pink');
+                }
             });
         });
 
@@ -325,9 +313,7 @@
             card.addEventListener('click', () => {
                 document.querySelectorAll('.voice-card').forEach(c => {
                     c.classList.remove('border-neon-green/50', 'bg-neon-green/10');
-                    c.classList.add('border-gray-700');
                 });
-                card.classList.remove('border-gray-700');
                 card.classList.add('border-neon-green/50', 'bg-neon-green/10');
                 selectedVoice = card.getAttribute('data-voice');
             });
@@ -418,8 +404,8 @@
                 });
                 
                 if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.detail?.message || 'May mali sa request');
+                    const errorText = await response.text();
+                    throw new Error(errorText || 'May mali sa request');
                 }
                 
                 const audioBlob = await response.blob();
