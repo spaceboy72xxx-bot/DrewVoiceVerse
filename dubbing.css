@@ -1,0 +1,7 @@
+.lang-row { display: flex; align-items: flex-end; gap: 10px; margin-top: 10px; }
+.lang-row > div { flex: 1; }
+.swap { font-size: 1.4rem; color: var(--cyan); padding-bottom: 22px; }
+@media (max-width: 480px) {
+    .lang-row { flex-wrap: wrap; }
+    .swap { transform: rotate(90deg); padding: 0; }
+}

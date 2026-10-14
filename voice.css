@@ -1,0 +1,21 @@
+.voice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.voice-option {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 8px; padding: 12px 8px; text-align: center; cursor: pointer; transition: all .2s;
+}
+.voice-option.selected { border-color: var(--green); background: rgba(57,255,20,.08); }
+.voice-option .emoji { font-size: 1.5rem; margin-bottom: 4px; }
+.voice-option span { font-size: .8rem; color: #ddd; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,240,255,.2), transparent); margin: 20px 0; }
+.btn-record {
+    width: 100%; padding: 12px; background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.3);
+    border-radius: 8px; color: #fca5a5; font-size: .95rem; font-weight: 600; cursor: pointer; margin-bottom: 8px;
+}
+.btn-record.recording { animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+.status { text-align: center; font-size: .85rem; color: var(--gray-text); margin-bottom: 12px; }
+.btn-upload {
+    display: block; text-align: center; padding: 12px;
+    background: rgba(0,240,255,.08); border: 1px solid rgba(0,240,255,.25);
+    border-radius: 8px; color: var(--cyan); font-size: .95rem; cursor: pointer; margin-bottom: 16px;
+}
