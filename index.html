@@ -3,289 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DrewVoiceVerse</title>
+    <title>🎤 Voice Changer — AI Realistic</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --green: #39FF14; --cyan: #00F0FF;
-            --purple: #BF00FF; --pink: #FF00C8;
-            --dark: #0F0F23; --gray-text: #9CA3AF;
-            --error: #ef4444;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--dark);
-            min-height: 100vh;
-            color: white;
-            position: relative;
-            overflow-x: hidden;
-        }
-        .bg-grid {
-            position: fixed; inset: 0;
-            background-image: 
-                linear-gradient(rgba(0,240,255,.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,240,255,.03) 1px, transparent 1px);
-            background-size: 40px 40px; opacity: .4; pointer-events: none;
-        }
-        .orb {
-            position: fixed; width: 300px; height: 300px; border-radius: 50%;
-            filter: blur(80px); opacity: .1; pointer-events: none;
-        }
-        .orb1 { background: var(--green); top: 5%; left: 50%; transform: translateX(-50%); }
-        .orb2 { background: var(--cyan); top: 20%; right: -100px; }
-        .orb3 { background: var(--purple); bottom: 10%; left: -100px; }
-        .container { position: relative; z-index: 1; max-width: 520px; margin: 0 auto; padding: 30px 20px; }
-        h1.logo {
-            font-family: 'Orbitron', sans-serif; font-size: 2.4rem; text-align: center; margin-bottom: 8px;
-        }
-        .text-green { color: var(--green); text-shadow: 0 0 10px var(--green); }
-        .text-cyan { color: var(--cyan); text-shadow: 0 0 10px var(--cyan); }
-        .tagline { text-align: center; color: var(--gray-text); margin-bottom: 35px; }
-        .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; justify-content: center; }
-        .tab-btn {
-            padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,.1);
-            background: transparent; color: var(--gray-text); cursor: pointer; transition: all .25s;
-        }
-        .tab-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,240,255,.05); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .card {
-            background: rgba(15,15,35,.8); border: 1px solid rgba(0,240,255,.15);
-            border-radius: 16px; padding: 24px; margin-bottom: 30px;
-        }
-        .card h2 { font-family: 'Orbitron', sans-serif; text-align: center; margin-bottom: 20px; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; color: var(--gray-text); font-size: .9rem; margin-bottom: 6px; }
-        textarea, select {
-            width: 100%; padding: 12px; background: rgba(0,0,0,.3);
-            border: 1px solid rgba(0,240,255,.15); border-radius: 8px;
-            color: white; font-size: 1rem; outline: none;
-        }
-        textarea:focus, select:focus { border-color: var(--cyan); }
-        textarea { min-height: 120px; resize: vertical; }
-        .slider-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        input[type="range"] {
-            width: 100%; height: 6px; border-radius: 3px;
-            background: rgba(0,240,255,.15); outline: none; -webkit-appearance: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 18px; height: 18px;
-            border-radius: 50%; background: var(--cyan); box-shadow: 0 0 6px var(--cyan); cursor: pointer;
-        }
-        .btn-primary {
-            width: 100%; padding: 14px; background: linear-gradient(90deg, var(--cyan), var(--purple));
-            border: none; border-radius: 10px; color: white; font-size: 1rem; font-weight: 700;
-            cursor: pointer; transition: transform .2s; margin: 10px 0 16px;
-        }
-        .btn-primary:hover { transform: translateY(-2px); }
-        .btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-        .result-box {
-            background: rgba(57,255,20,.03); border: 1px solid rgba(57,255,20,.15);
-            border-radius: 10px; padding: 16px; text-align: center;
-        }
-        .result-box.hidden { display: none; }
-        .success { color: var(--green); margin-bottom: 10px; font-weight: 600; }
-        .error { color: var(--error); margin-bottom: 10px; font-weight: 500; }
-        audio { width: 100%; margin-bottom: 10px; border-radius: 6px; }
-        .voice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-        .voice-option {
-            background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
-            border-radius: 8px; padding: 12px 8px; text-align: center; cursor: pointer; transition: all .2s;
-        }
-        .voice-option.selected { border-color: var(--green); background: rgba(57,255,20,.08); }
-        .voice-option .emoji { font-size: 1.5rem; margin-bottom: 4px; }
-        .voice-option span { font-size: .85rem; color: #ddd; }
-        .status-text { font-size: .85rem; color: var(--gray-text); margin-top: 8px; }
-        .loading { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.2); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px; vertical-align: middle; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        footer { text-align: center; color: var(--gray-text); font-size: .8rem; padding-top: 20px; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="voice-changer.css">
 </head>
 <body>
     <div class="bg-grid"></div>
     <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
 
     <div class="container">
-        <h1 class="logo"><span class="text-green">DREW</span> <span class="text-cyan">VOICEVERSE</span></h1>
-        <p class="tagline">Powered by ElevenLabs AI</p>
+        <a href="index.html" class="back-link">← Bumalik sa Home</a>
+        
+        <h1><span class="text-green">🎤 VOICE CHANGER</span></h1>
+        <p class="tagline">I-record o mag-upload → baguhin sa AI voice — realistic quality</p>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="tts">📝 Text to Speech</button>
-            <button class="tab-btn" data-tab="voice">🎤 Voice Changer</button>
-            <button class="tab-btn" data-tab="video">🎬 Image to Video</button>
-            <button class="tab-btn" data-tab="dubbing">🌐 Video Dubbing</button>
+        <div class="card">
+            <h2>1️⃣ Pinagmulan ng Audio</h2>
+            
+            <button id="recordBtn" class="btn-record">🔴 SIMULAN ANG PAG-RECORD</button>
+            <p id="recStatus" class="status-text">Handang mag-record</p>
+            
+            <div class="divider"></div>
+            
+            <label class="btn-upload">
+                📁 O MAG-UPLOAD NG AUDIO FILE
+                <input type="file" id="audioInput" accept="audio/*" hidden>
+            </label>
+            <p id="fileStatus" class="status-text">Walang napiling file</p>
         </div>
 
-        <!-- TEXT TO SPEECH -->
-        <div id="tts" class="tab-content active">
-            <div class="card">
-                <h2 style="color: var(--cyan);">📝 TEXT TO SPEECH</h2>
-                <p style="text-align:center;color:var(--gray-text);margin-bottom:18px;">I-type ang teksto at piliin ang AI voice</p>
-                
-                <div class="form-group">
-                    <label>I-type ang iyong teksto:</label>
-                    <textarea id="tts-text" placeholder="Hello! Ako ang AI voice mo..."></textarea>
+        <div class="card">
+            <h2>2️⃣ Piliin ang Bagong Boses</h2>
+            
+            <div class="voice-grid" id="voiceGrid">
+                <div class="voice-option" data-id="hpp4J3VqNfWAUOO0d1Us">
+                    <div class="emoji">👩</div><span>Bella</span>
                 </div>
-                
-                <div class="form-group">
-                    <label>Pumili ng Boses:</label>
-                    <select id="voice-select">
-                        <option value="hpp4J3VqNfWAUOO0d1Us">Bella</option>
-                        <option value="FGY2WhTYpPnrIDTdsKH5">Laura</option>
-                        <option value="SAz9YHcvj6GT2YYXdXww">River</option>
-                        <option value="cjVigY5qzO86Huf0OWal">Eric</option>
-                        <option value="pqHfZKP75CvOlQylNhV4" selected>Bill</option>
-                        <option value="pFZP5JQG7iQjIQuC4Bku">Lily</option>
-                        <option value="EXAVITQu4vr4xnSDxMaL">Sarah</option>
-                        <option value="JBFqnCBsd6RMkjVDRZzb">George</option>
-                    </select>
+                <div class="voice-option" data-id="FGY2WhTYpPnrIDTdsKH5">
+                    <div class="emoji">👩</div><span>Laura</span>
                 </div>
-                
-                <div class="slider-row">
-                    <div class="form-group">
-                        <label>Katapangan: <span id="stab-val">50%</span></label>
-                        <input type="range" id="stability" min="0" max="100" value="50">
-                    </div>
-                    <div class="form-group">
-                        <label>Kalinawan: <span id="clar-val">75%</span></label>
-                        <input type="range" id="clarity" min="0" max="100" value="75">
-                    </div>
+                <div class="voice-option" data-id="SAz9YHcvj6GT2YYXdXww">
+                    <div class="emoji">🌊</div><span>River</span>
                 </div>
-                
-                <button id="generate-btn" class="btn-primary">🔊 GENERATE AUDIO</button>
-                <p id="status" class="status-text"></p>
-                
-                <div id="tts-result" class="result-box hidden">
-                    <p id="result-message" class="success">✅ Tapos na!</p>
-                    <audio id="audio-player" controls>
+                <div class="voice-option" data-id="cjVigY5qzO86Huf0OWal">
+                    <div class="emoji">👨</div><span>Eric</span>
+                </div>
+                <div class="voice-option selected" data-id="pqHfZKP75CvOlQylNhV4">
+                    <div class="emoji">👨</div><span>Bill</span>
+                </div>
+                <div class="voice-option" data-id="pFZP5JQG7iQjIQuC4Bku">
+                    <div class="emoji">👩</div><span>Lily</span>
+                </div>
+                <div class="voice-option" data-id="EXAVITQu4vr4xnSDxMaL">
+                    <div class="emoji">👩</div><span>Sarah</span>
+                </div>
+                <div class="voice-option" data-id="JBFqnCBsd6RMkjVDRZzb">
+                    <div class="emoji">👨</div><span>George</span>
                 </div>
             </div>
         </div>
 
-        <!-- VOICE CHANGER -->
-        <div id="voice" class="tab-content">
-            <div class="card">
-                <h2 style="color: var(--green);">🎙️ VOICE CHANGER</h2>
-                <p style="text-align:center;color:var(--gray-text);margin-bottom:18px;">Papalabas — kailangan ng dagdag na setup</p>
-                <p style="text-align:center;color:#f87171;font-size:.9rem;">⚠️ Available soon</p>
+        <div class="card">
+            <h2>3️⃣ I-convert!</h2>
+            <button id="convertBtn" class="btn-primary">✨ IBAHIN ANG BOSES — AI REALISTIC</button>
+            <p id="convertStatus" class="status-text"></p>
+            
+            <div id="resultBox" class="result-box hidden">
+                <p id="resultMsg" class="success">✅ Tapos na!</p>
+                <audio id="outputAudio" controls>
+                <a id="downloadLink" style="display:block; text-decoration:none; margin-top:12px;">
+                    <button class="btn-primary" style="background:linear-gradient(90deg,#00F0FF,#BF00FF);">⬇ I-DOWNLOAD ANG BAGONG BOSES</button>
+                </a>
             </div>
         </div>
 
-        <!-- IMAGE TO VIDEO -->
-        <div id="video" class="tab-content">
-            <div class="card">
-                <h2 style="color: var(--purple);">🎬 IMAGE TO VIDEO</h2>
-                <p style="text-align:center;color:var(--gray-text);margin-bottom:18px;">Papalabas</p>
-                <p style="text-align:center;color:#f87171;font-size:.9rem;">⚠️ Available soon</p>
-            </div>
-        </div>
-
-        <!-- VIDEO DUBBING -->
-        <div id="dubbing" class="tab-content">
-            <div class="card">
-                <h2 style="color: var(--pink);">🌐 VIDEO DUBBING</h2>
-                <p style="text-align:center;color:var(--gray-text);margin-bottom:18px;">Papalabas</p>
-                <p style="text-align:center;color:#f87171;font-size:.9rem;">⚠️ Available soon</p>
-            </div>
-        </div>
-
-        <footer>© 2026 DrewVoiceVerse • ElevenLabs API Connected</footer>
+        <footer>Powered by ElevenLabs Speech-to-Speech AI</footer>
     </div>
 
     <script>
-        // ===== ELEVENLABS API CONFIG =====
         const API_KEY = 'sk_ab07b8598b3586c17cdc0f64a6fa42211562290ae6432785';
         const API_BASE = 'https://api.elevenlabs.io/v1';
 
-        // Tab switching
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.dataset.tab;
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
+        const recordBtn = document.getElementById('recordBtn');
+        const recStatus = document.getElementById('recStatus');
+        const audioInput = document.getElementById('audioInput');
+        const fileStatus = document.getElementById('fileStatus');
+        const convertBtn = document.getElementById('convertBtn');
+        const convertStatus = document.getElementById('convertStatus');
+        const resultBox = document.getElementById('resultBox');
+        const resultMsg = document.getElementById('resultMsg');
+        const outputAudio = document.getElementById('outputAudio');
+        const downloadLink = document.getElementById('downloadLink');
+        const voiceGrid = document.getElementById('voiceGrid');
+
+        let mediaRecorder;
+        let recordedChunks = [];
+        let audioBlob = null;
+        let selectedVoiceId = 'pqHfZKP75CvOlQylNhV4';
+        let isRecording = false;
+        let outputBlobUrl = null;
+
+        voiceGrid.querySelectorAll('.voice-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                voiceGrid.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                selectedVoiceId = opt.dataset.id;
             });
         });
 
-        // Sliders
-        const stability = document.getElementById('stability');
-        const clarity = document.getElementById('clarity');
-        const stabVal = document.getElementById('stab-val');
-        const clarVal = document.getElementById('clar-val');
-        const status = document.getElementById('status');
-        const generateBtn = document.getElementById('generate-btn');
-        const ttsResult = document.getElementById('tts-result');
-        const resultMessage = document.getElementById('result-message');
-        const audioPlayer = document.getElementById('audio-player');
+        recordBtn.addEventListener('click', async () => {
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    recordedChunks = [];
+                    
+                    mediaRecorder.ondataavailable = e => recordedChunks.push(e.data);
+                    mediaRecorder.onstop = () => {
+                        audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
+                        fileStatus.textContent = '✅ Recording saved!';
+                        recStatus.textContent = 'Handa nang i-convert';
+                    };
+                    
+                    mediaRecorder.start();
+                    isRecording = true;
+                    recordBtn.classList.add('recording');
+                    recordBtn.innerHTML = '⏹ ITIGIL ANG PAG-RECORD';
+                    recStatus.textContent = '🔴 Nagrerecord... Magsalita ka!';
+                    
+                } catch (err) {
+                    alert('❌ Hindi ma-access ang mikropono: ' + err.message);
+                }
+            } else {
+                mediaRecorder.stop();
+                isRecording = false;
+                recordBtn.classList.remove('recording');
+                recordBtn.innerHTML = '🔴 SIMULAN ANG PAG-RECORD';
+            }
+        });
 
-        stability.addEventListener('input', () => stabVal.textContent = stability.value + '%');
-        clarity.addEventListener('input', () => clarVal.textContent = clarity.value + '%');
+        audioInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (file) {
+                audioBlob = file;
+                fileStatus.textContent = '✅ Napili: ' + file.name;
+                recStatus.textContent = 'Handa nang i-convert';
+            }
+        });
 
-        // Generate Audio
-        generateBtn.addEventListener('click', async () => {
-            const text = document.getElementById('tts-text').value.trim();
-            const voiceId = document.getElementById('voice-select').value;
-            
-            if (!text) {
-                alert('⚠️ Mag-type muna ng teksto!');
+        convertBtn.addEventListener('click', async () => {
+            if (!audioBlob) {
+                alert('⚠️ Mag-record o mag-upload muna ng audio!');
                 return;
             }
 
-            if (text.length > 5000) {
-                alert('⚠️ Sobrang haba ng teksto! Limit: 5000 characters');
-                return;
-            }
-
-            // UI Loading state
-            generateBtn.disabled = true;
-            generateBtn.innerHTML = '<span class="loading"></span>GENERATING...';
-            status.textContent = '🔄 Kumokonekta sa ElevenLabs...';
-            ttsResult.classList.add('hidden');
+            convertBtn.disabled = true;
+            convertBtn.innerHTML = '<span class="loading"></span>INI-ISIP NG AI...';
+            convertStatus.textContent = '🔄 Nagpapadala sa ElevenLabs...';
+            resultBox.classList.add('hidden');
 
             try {
-                const response = await fetch(`${API_BASE}/text-to-speech/${voiceId}`, {
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'input.wav');
+                formData.append('voice_id', selectedVoiceId);
+                formData.append('model_id', 'eleven_english_sts_v2');
+                formData.append('output_format', 'mp3_44100_128');
+
+                const response = await fetch(`${API_BASE}/speech-to-speech/${selectedVoiceId}`, {
                     method: 'POST',
-                    headers: {
-                        'xi-api-key': API_KEY,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: text,
-                        model_id: 'eleven_multilingual_v2',
-                        voice_settings: {
-                            stability: parseInt(stability.value) / 100,
-                            similarity_boost: parseInt(clarity.value) / 100
-                        }
-                    })
+                    headers: { 'xi-api-key': API_KEY },
+                    body: formData
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.detail?.message || `Error ${response.status}`);
+                    const errText = await response.text();
+                    throw new Error(`API Error ${response.status} — tingnan ang API key at credits`);
                 }
 
-                const audioBlob = await response.blob();
-                const audioUrl = URL.createObjectURL(audioBlob);
+                const resultBlob = await response.blob();
+                outputBlobUrl = URL.createObjectURL(resultBlob);
                 
-                audioPlayer.src = audioUrl;
-                resultMessage.className = 'success';
-                resultMessage.textContent = '✅ Tapos na! Pakinggan ang boses mo 👇';
-                ttsResult.classList.remove('hidden');
-                status.textContent = '🎉 Handang-handa na!';
+                outputAudio.src = outputBlobUrl;
+                downloadLink.href = outputBlobUrl;
+                downloadLink.download = 'ai-voice-' + Date.now() + '.mp3';
+                
+                resultMsg.className = 'success';
+                resultMsg.textContent = '✅ TAPOS NA! Narito ang bagong boses mo 👇';
+                resultBox.classList.remove('hidden');
+                convertStatus.textContent = '🎉 Realistic AI voice generated!';
 
-            } catch (error) {
-                console.error('Error:', error);
-                resultMessage.className = 'error';
-                resultMessage.textContent = '❌ Error: ' + error.message;
-                ttsResult.classList.remove('hidden');
-                status.textContent = '⚠️ May problema sa API call';
+            } catch (err) {
+                resultMsg.className = 'error';
+                resultMsg.textContent = '❌ ' + err.message;
+                resultBox.classList.remove('hidden');
+                convertStatus.textContent = '⚠️ May problema — tingnan ang API key at internet';
             } finally {
-                generateBtn.disabled = false;
-                generateBtn.innerHTML = '🔊 GENERATE AUDIO';
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '✨ IBAHIN ANG BOSES — AI REALISTIC';
             }
         });
     </script>
