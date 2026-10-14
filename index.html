@@ -94,25 +94,25 @@
                 
                 <h3 class="text-center text-gray-300 mb-4">Pumili ng Boses</h3>
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
-                    <div class="voice-card selected glass p-3 rounded-lg border border-neon-green/50 cursor-pointer" data-voice="adam">
+                    <div class="voice-card selected glass p-3 rounded-lg border border-neon-green/50 cursor-pointer" data-voice="pNInz6obpgDQGcFmaJgB">
                         <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-green/20 flex items-center justify-center text-xl">👨</div>
                         <p class="text-center text-sm font-semibold">Adam</p>
                     </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-neon-cyan/50" data-voice="rachel">
+                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="21m00Tcm4TlvDq8ikWAM">
                         <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-cyan/20 flex items-center justify-center text-xl">👩</div>
                         <p class="text-center text-sm font-semibold">Rachel</p>
                     </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-neon-cyan/50" data-voice="elli">
+                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="AZnzlk1XvdvUeBnXmlldc">
                         <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-cyan/20 flex items-center justify-center text-xl">👧</div>
                         <p class="text-center text-sm font-semibold">Elli</p>
                     </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-neon-green/50" data-voice="antoni">
+                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="onwK4e9ZLuTAKqWW03F9">
                         <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-green/20 flex items-center justify-center text-xl">🧔</div>
                         <p class="text-center text-sm font-semibold">Antoni</p>
                     </div>
-                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer hover:border-neon-purple/50" data-voice="sam">
-                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-purple/20 flex items-center justify-center text-xl">🧑</div>
-                        <p class="text-center text-sm font-semibold">Sam</p>
+                    <div class="voice-card glass p-3 rounded-lg border border-gray-700 cursor-pointer" data-voice="iMl51dKLSb3bP1N9G9wB">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-neon-purple/20 flex items-center justify-center text-xl">👩</div>
+                        <p class="text-center text-sm font-semibold">Nicole</p>
                     </div>
                 </div>
 
@@ -162,10 +162,10 @@
                         <label class="text-sm text-gray-400 block mb-2">Pumili ng Boses:</label>
                         <select id="ttsVoice" class="w-full bg-dark/50 border border-neon-cyan/30 rounded-lg p-3 focus:outline-none">
                             <option value="21m00Tcm4TlvDq8ikWAM">Rachel — Babae</option>
-                            <option value="pNInz6obpgDQGcFmaJgA">Adam — Lalaki</option>
-                            <option value="AZnzlk1XvdvUeBnXmlldl">Elli — Babae</option>
-                            <option value="onwK6tOVpVcuwAkWVGVP">Antoni — Lalaki</option>
-                            <option value="yo0Z8kKLbL6KH0R9WJ5R">Sam — Neutral</option>
+                            <option value="pNInz6obpgDQGcFmaJgB" selected>Adam — Lalaki</option>
+                            <option value="AZnzlk1XvdvUeBnXmlldc">Elli — Babae</option>
+                            <option value="onwK4e9ZLuTAKqWW03F9">Antoni — Lalaki</option>
+                            <option value="iMl51dKLSb3bP1N9G9wB">Nicole — Babae</option>
                         </select>
                     </div>
                     
@@ -298,8 +298,8 @@
     </div>
 
     <script>
-        let API_KEY = 'sk_88c95021af34464fe9a2a21741fa10d60674e7eea1f98a56';
-        let selectedVoice = 'pNInz6obpgDQGcFmaJgA';
+        const API_KEY = 'sk_88c95021af34464fe9a2a21741fa10d60674e7eea1f98a56';
+        let selectedVoice = 'pNInz6obpgDQGcFmaJgB';
         let mediaRecorder = null;
         let recordedChunks = [];
         let isRecording = false;
@@ -324,7 +324,7 @@
         document.querySelectorAll('.voice-card').forEach(card => {
             card.addEventListener('click', () => {
                 document.querySelectorAll('.voice-card').forEach(c => {
-                    c.classList.remove('border-neon-green/50', 'bg-neon-green/50');
+                    c.classList.remove('border-neon-green/50', 'bg-neon-green/10');
                     c.classList.add('border-gray-700');
                 });
                 card.classList.remove('border-gray-700');
@@ -351,7 +351,7 @@
                     };
                     
                     mediaRecorder.onstop = () => {
-                        document.getElementById('recordingStatus').textContent = '✅ Nakatala na! Handa nang i-convert.';
+                        document.getElementById('recordingStatus').textContent = '✅ Nakatala na!';
                     };
                     
                     mediaRecorder.start();
@@ -383,7 +383,7 @@
                 alert('⚠️ Mag-record muna o mag-upload ng audio file!');
                 return;
             }
-            alert('🔄 Voice Conversion — feature coming soon!\n\nSubukan muna ang Text to Speech tab.');
+            alert('🔄 Voice Conversion — feature coming soon!');
             document.getElementById('voiceResult').classList.remove('hidden');
             document.getElementById('voiceResult').scrollIntoView({ behavior: 'smooth' });
         }
@@ -419,7 +419,7 @@
                 
                 if (!response.ok) {
                     const error = await response.json();
-                    throw new Error(error.detail?.message || 'May nangyaring mali sa API request');
+                    throw new Error(error.detail?.message || 'May mali sa request');
                 }
                 
                 const audioBlob = await response.blob();
