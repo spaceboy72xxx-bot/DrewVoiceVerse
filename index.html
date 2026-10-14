@@ -64,27 +64,12 @@
     <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-neon-purple/5 rounded-full blur-3xl"></div>
 
     <div class="relative z-10 container mx-auto px-4 py-6 max-w-7xl">
-        <header class="text-center mb-8 pt-4">
+        <header class="text-center mb-10 pt-4">
             <h1 class="font-orbitron text-4xl md:text-6xl font-bold mb-3">
                 <span class="text-neon-green text-glow">DREW</span>
                 <span class="text-neon-cyan text-glow">VOICEVERSE</span>
             </h1>
             <p class="text-gray-400 text-lg">Your Complete AI Media Studio — Voice • Speech • Video • Dubbing</p>
-            
-            <!-- API Key Input -->
-            <div class="mt-6 max-w-lg mx-auto glass rounded-xl p-4 border border-neon-green/20 border-glow">
-                <label class="block text-sm text-neon-cyan mb-2 font-semibold">
-                    <i class="fa fa-key mr-2"></i>ELEVENLABS API KEY
-                </label>
-                <div class="flex gap-2">
-                    <input type="password" id="apiKey" placeholder="Ilagay ang iyong ElevenLabs API key..." 
-                        class="flex-1 bg-dark/50 border border-neon-green/30 rounded-lg px-4 py-2 focus:outline-none focus:border-neon-green text-sm">
-                    <button onclick="saveApiKey()" class="bg-neon-green/20 hover:bg-neon-green/40 text-neon-green px-4 rounded-lg transition-all font-semibold">
-                        SAVE
-                    </button>
-                </div>
-                <p class="text-xs text-gray-500 mt-2">Naka-save lang sa device mo — hindi ito ipinapadala sa iba</p>
-            </div>
         </header>
 
         <nav class="flex flex-wrap justify-center gap-2 mb-10">
@@ -313,40 +298,23 @@
     </div>
 
     <script>
-        let API_KEY = localStorage.getItem('elevenlabs_api_key') || 'sk_88c95021af34464fe9a2a21741fa10d60674e7eea1f98a56';
-        let selectedVoice = 'pNInz6obpgDQGcFmaJgA'; // Default: Adam
+        let API_KEY = 'sk_88c95021af34464fe9a2a21741fa10d60674e7eea1f98a56';
+        let selectedVoice = 'pNInz6obpgDQGcFmaJgA';
         let mediaRecorder = null;
         let recordedChunks = [];
         let isRecording = false;
 
-        // Save API Key
-        function saveApiKey() {
-            const key = document.getElementById('apiKey').value.trim();
-            if (key) {
-                API_KEY = key;
-                localStorage.setItem('elevenlabs_api_key', key);
-                alert('✅ API Key na-save na! Handang-handa na ang AI features mo!');
-            } else {
-                alert('⚠️ Ilagay muna ang iyong API key.');
-            }
-        }
-        if (API_KEY) document.getElementById('apiKey').value = API_KEY;
-
         // Tab switching
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                // Remove active from all tabs
                 document.querySelectorAll('.tab-btn').forEach(b => {
                     b.classList.remove('border-neon-green', 'text-neon-green');
                     b.classList.add('border-gray-600', 'text-gray-300');
                 });
-                // Set active on clicked tab
                 btn.classList.remove('border-gray-600', 'text-gray-300');
                 btn.classList.add('border-neon-green', 'text-neon-green');
                 
-                // Hide all panels
                 document.querySelectorAll('.tab-content').forEach(p => p.classList.add('hidden'));
-                // Show selected panel
                 const tabId = btn.getAttribute('data-tab');
                 document.getElementById(`${tabId}-panel`).classList.remove('hidden');
             });
@@ -368,7 +336,7 @@
         // Recording functions
         async function toggleRecording() {
             if (!API_KEY) {
-                alert('⚠️ Ilagay muna ang iyong ElevenLabs API Key sa itaas!');
+                alert('⚠️ API Key not set!');
                 return;
             }
 
@@ -409,31 +377,18 @@
             }
         }
 
-        async function convertVoice() {
-            if (!API_KEY) {
-                alert('⚠️ Ilagay muna ang iyong ElevenLabs API Key sa itaas at i-click SAVE!');
-                return;
-            }
-            
+        function convertVoice() {
             const status = document.getElementById('recordingStatus').textContent;
             if (status === 'Handang mag-record') {
                 alert('⚠️ Mag-record muna o mag-upload ng audio file!');
                 return;
             }
-            
-            alert('🔄 Pinoproseso... Tumatagal ito ng ilang segundo.\n\n📌 Paalala: Ang Voice Conversion API ng ElevenLabs ay nangangailangan ng karagdagang setup. Gumagana ang Text-to-Speech agad — subukan muna ang tab na "Text to Speech"!');
-            
-            // Demo mode - show success
+            alert('🔄 Voice Conversion — feature coming soon!\n\nSubukan muna ang Text to Speech tab.');
             document.getElementById('voiceResult').classList.remove('hidden');
             document.getElementById('voiceResult').scrollIntoView({ behavior: 'smooth' });
         }
 
         async function generateSpeech() {
-            if (!API_KEY) {
-                alert('⚠️ Ilagay muna ang iyong ElevenLabs API Key sa itaas at i-click SAVE!');
-                return;
-            }
-            
             const text = document.getElementById('ttsText').value.trim();
             if (!text) {
                 alert('⚠️ Mag-type muna ng teksto!');
@@ -474,7 +429,7 @@
                 document.getElementById('ttsResult').scrollIntoView({ behavior: 'smooth' });
                 
             } catch (error) {
-                alert('❌ Error: ' + error.message + '\n\n📌 Tingnan kung tama ang API key mo at may credits pa ang account mo.');
+                alert('❌ Error: ' + error.message);
             }
         }
 
@@ -490,11 +445,11 @@
         }
 
         function generateVideo() {
-            alert('ℹ️ Ang Image-to-Video feature ay nangangailangan ng ibang AI service.\n\n📌 Para gumana ito: gamitin ang services tulad ng Runway Gen-2, Pika Labs, o Stability AI Video API.');
+            alert('ℹ️ Image-to-Video requires external API services.');
         }
 
         function startDubbing() {
-            alert('ℹ️ Ang Video Dubbing ay available sa ElevenLabs Dubbing API.\n\n📌 Siguraduhin na may sapat na credits ka sa ElevenLabs account mo para magamit ito.');
+            alert('ℹ️ Video Dubbing available in ElevenLabs API.');
         }
 
         function downloadAudio(audioId, filename) {
